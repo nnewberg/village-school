@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Village School Merch - 90s Style!</title>
+    <style>
+      body {
+        background-color: #ff0000;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      .bouncing-item {
+        position: fixed;
+        z-index: 1000;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #cc0000; /* darker red */
+        border: 10px ridge white;
+        padding: 20px;
+        box-shadow: 10px 10px 0px #990000;
+      }
+
+      h1 {
+        font-size: 32px;
+        text-shadow: 3px 3px 0px #990000;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        animation: blink 1s infinite alternate;
+      }
+
+      h2 {
+        font-size: 24px;
+        color: white;
+        text-shadow: 2px 2px 0px #990000;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+
+      h3 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+
+      .merch-item {
+        border: 5px dashed white;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #e60000;
+      }
+
+      .merch-item img {
+        max-width: 180px;
+        filter: drop-shadow(5px 5px 8px rgba(0, 0, 0, 0.5));
+        transition: transform 0.3s ease;
+      }
+
+      .merch-item img:hover {
+        transform: scale(1.1);
+      }
+
+      .merch-images {
+        position: relative;
+        height: 300px;
+        margin: 20px 0;
+      }
+
+      .merch-images.compact {
+        height: 200px;
+      }
+
+      .merch-image-container {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .merch-image-container:first-child {
+        top: 10px;
+        left: calc(50% - 150px);
+        transform: rotate(-5deg);
+        z-index: 2;
+      }
+
+      .merch-image-container:last-child {
+        top: 25px;
+        left: calc(50% - 30px);
+        transform: rotate(8deg);
+        z-index: 1;
+      }
+
+      .retro-badge {
+        background-color: white;
+        color: #ff0000;
+        font-weight: bold;
+        padding: 5px 10px;
+        border: 2px solid white;
+        transform: rotate(-5deg);
+        display: inline-block;
+        font-size: 18px;
+        margin: 10px 0;
+        box-shadow: 3px 3px 0 #990000;
+      }
+
+      .logo {
+        margin-top: 8px;
+        max-width: 300px;
+        /* filter: drop-shadow(5px 5px 5px #990000); */
+      }
+
+      .blink {
+        animation: blink 1s infinite alternate;
+      }
+
+      marquee {
+        background-color: white;
+        color: #ff0000;
+        font-weight: bold;
+        padding: 10px;
+        margin: 20px 0;
+      }
+
+      .counter {
+        font-family: monospace;
+        font-size: 18px;
+        background-color: white;
+        color: #ff0000;
+        padding: 5px;
+        border: 2px inset #990000;
+        display: inline-block;
+        margin-top: 20px;
+      }
+
+      .button {
+        background: linear-gradient(to bottom, #ff0000, #cc0000);
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border: 3px outset white;
+        font-size: 18px;
+        cursor: pointer;
+        margin: 10px;
+        text-shadow: 1px 1px 0px #990000;
+      }
+
+      .button:disabled {
+        background: linear-gradient(to bottom, #999, #666);
+        border: 3px inset #999;
+        cursor: not-allowed;
+      }
+
+      @keyframes blink {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0.5;
+        }
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      // Shop URL
+      const SHOP_URL =
+        'https://shops.stitchesandscreens.com/villageschoolfirerelief/shop/home';
+
+      // Bouncing items configuration
+      const bouncingItems = [
+        {
+          image: 'pixels/cup.png',
+          size: '60px',
+          speedX: 2,
+          speedY: 3,
+          rotation: true,
+        },
+        {
+          image: 'pixels/football.png',
+          size: '70px',
+          speedX: -2.5,
+          speedY: 2,
+          rotation: true,
+        },
+        {
+          image: 'pixels/goal.png',
+          size: '50px',
+          speedX: 3,
+          speedY: -2,
+          rotation: true,
+        },
+        {
+          image: 'pixels/hat.png',
+          size: '65px',
+          speedX: -1.5,
+          speedY: -2.5,
+          rotation: true,
+        },
+        {
+          image: 'pixels/house.png',
+          size: '80px',
+          speedX: 1,
+          speedY: 1.5,
+          rotation: false,
+        },
+        {
+          image: 'pixels/la.png',
+          size: '55px',
+          speedX: -3,
+          speedY: 2,
+          rotation: true,
+        },
+        {
+          image: 'pixels/tower.png',
+          size: '75px',
+          speedX: 2,
+          speedY: -1,
+          rotation: false,
+        },
+        {
+          image: 'pixels/viking.png',
+          size: '65px',
+          speedX: -2,
+          speedY: 1.5,
+          rotation: true,
+        },
+      ];
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Create bouncing items
+        bouncingItems.forEach((item) => {
+          createBouncingItem(item);
+        });
+      });
+
+      function createBouncingItem(config) {
+        const item = document.createElement('div');
+        item.className = 'bouncing-item';
+        const img = document.createElement('img');
+        img.src = config.image;
+        img.style.width = config.size;
+        img.style.height = config.size;
+        img.style.objectFit = 'contain';
+        item.appendChild(img);
+
+        // Set random starting position
+        let posX = Math.random() * (window.innerWidth - 100);
+        let posY = Math.random() * (window.innerHeight - 100);
+        let speedX = config.speedX;
+        let speedY = config.speedY;
+
+        item.style.left = posX + 'px';
+        item.style.top = posY + 'px';
+
+        if (config.rotation) {
+          item.style.animation =
+            'rotate ' + (Math.random() * 5 + 3) + 's linear infinite';
+        }
+
+        document.body.appendChild(item);
+
+        // Animation function
+        function animate() {
+          posX += speedX;
+          posY += speedY;
+
+          // Bounce off walls
+          if (posX < 0 || posX > window.innerWidth - 50) {
+            speedX = -speedX;
+          }
+
+          if (posY < 0 || posY > window.innerHeight - 50) {
+            speedY = -speedY;
+          }
+
+          item.style.left = posX + 'px';
+          item.style.top = posY + 'px';
+
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+      }
+    </script>
+  </head>
+  <body>
+    <marquee scrollamount="10" direction="left" behavior="alternate"
+      >*** WELCOME TO VILLAGE SCHOOL UNIFORM SHOP! ***</marquee
+    >
+
+    <div class="container">
+      <img src="vs-logo-text.png" alt="Village School Logo" class="logo" />
+      <h1>UNIFORM SHOP</h1>
+      <h2>Pacific Palisades, CA</h2>
+      <h3>Est. 1977</h3>
+
+      <div class="merch-item">
+        <h3 class="blink">✨ COOL T-SHIRTS ✨</h3>
+        <div class="merch-images">
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/tee-red.png"
+              alt="Village School Red T-Shirt"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              RED
+            </p>
+          </div>
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/tee-black.png"
+              alt="Village School Black T-Shirt"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              BLACK
+            </p>
+          </div>
+        </div>
+        <p>Show your Village School spirit with our awesome t-shirts!</p>
+        <p>Starts at $24.00</p>
+        <button class="button" onclick="window.open(SHOP_URL, '_blank')">
+          ADD TO CART
+        </button>
+      </div>
+
+      <div class="merch-item">
+        <h3 class="blink">✨ RADICAL HOODIES ✨</h3>
+        <div class="merch-images">
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/hoodie-red.png"
+              alt="Village School Red Hoodie"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              RED
+            </p>
+          </div>
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/hoodie-black.png"
+              alt="Village School Black Hoodie"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              BLACK
+            </p>
+          </div>
+        </div>
+        <p><span class="retro-badge">HOT ITEM!</span></p>
+        <p>Stay warm and stylish with Village School hoodies!</p>
+        <p>Starts at $45.00</p>
+        <button class="button" onclick="window.open(SHOP_URL, '_blank')">
+          ADD TO CART
+        </button>
+      </div>
+
+      <div class="merch-item">
+        <h3 class="blink">✨ GNARLY HATS ✨</h3>
+        <div class="merch-images compact">
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/hat-red.png"
+              alt="Village School Red Hat"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              RED
+            </p>
+          </div>
+          <div class="merch-image-container">
+            <img
+              src="clothes-for-sale/hat-black.png"
+              alt="Village School Black Hat"
+            />
+            <p style="font-weight: bold; text-shadow: 1px 1px 3px #990000">
+              BLACK
+            </p>
+          </div>
+        </div>
+        <p style="margin-top: 5px"><span class="retro-badge">NEW!</span></p>
+        <p>Protect yourself from the sun with Village School caps!</p>
+        <p>Only $40.00</p>
+        <button class="button" onclick="window.open(SHOP_URL, '_blank')">
+          ADD TO CART
+        </button>
+      </div>
+
+      <marquee scrollamount="5" direction="right"
+        >FREE SHIPPING ON ORDERS OVER $50!!!</marquee
+      >
+
+      <div class="counter">VISITORS: 133,769</div>
+
+      <p style="margin-top: 30px; font-size: 12px">
+        © 1995 Village School - Pacific Palisades
+      </p>
+      <p style="font-size: 10px; color: white">
+        Best viewed in Netscape Navigator 3.0 at 800x600 resolution
+      </p>
+    </div>
+
+    <img
+      src="https://web.archive.org/web/20091021012448/http://www.geocities.com/Area51/Corridor/5177/maconstruction.gif"
+      alt="Under Construction"
+      style="filter: hue-rotate(30deg)"
+    /><!-- Changed to red/white -->
+  </body>
+</html>
